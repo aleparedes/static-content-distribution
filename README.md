@@ -13,3 +13,6 @@ Some considerations:
 - A basic authentication protection for the distribution is implemented (static username + password).
 - Documentation of how to deploy and run is provided.
 - Testing is included.
+
+## Architecture
+![][doc/architecture.png]

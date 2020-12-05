@@ -1,0 +1,29 @@
+@startuml
+!include <awslib/AWSCommon>
+
+' Uncomment the following line to create simplified view
+' !include <awslib/AWSSimplified>
+
+!include <awslib/General/Users>
+!include <awslib/SecurityIdentityAndCompliance/Cognito>
+!include <awslib/Compute/Lambda>
+!include <awslib/Storage/S3Bucket>
+!include <awslib/NetworkingAndContentDelivery/CloudFront>
+!include <awslib/NetworkingAndContentDelivery/Route53>
+
+left to right direction
+S3Bucket(app, "Application", "Serve a SPA")
+S3Bucket(content, "Static Content", "Serve static content")
+Users(users, "Users", "Globally located users")
+Lambda(auth, "Authorization", "Simple authorization")
+CloudFront(cloudfront, "Distribution", "Content delivery network")
+Route53(route53, "DNS", "Domain Name System")
+
+users --> cloudfront: content requests
+users --> route53: DNS queries
+cloudfront <--> route53: handling the DNS
+cloudfront --> auth: authorization
+auth --> app: request the app
+auth --> content: request the static content
+
+@enduml
