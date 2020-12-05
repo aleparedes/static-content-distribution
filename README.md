@@ -15,4 +15,4 @@ Some considerations:
 - Testing is included.
 
 ## Architecture
-![][doc/architecture.png]
+![Architecture](doc/architecture.png?raw=true)
