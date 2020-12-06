@@ -19,12 +19,15 @@ This repository is structured as follows:
 .
 ├── .gitignore                  -> ignored files
 ├── README.md                   -> this readme file
-├── doc                         -> documentation folder
-│   ├── architecture.png        -> rendered achitecture diagram 
-│   └── architecture.puml       -> PlantUML architecture diagram
+├── doc                         -> documentation and diagrams folder
+│   ├── architecture.png        -> rendered achitecture diagram 
+│   └── architecture.puml       -> PlantUML architecture diagram
 └── terraform                   -> terraform files
-    ├── config.tf               -> terraform configuration variables
-    └── storage.tf              -> storage deployment file
+    ├── config.tf               -> terraform configuration variables          
+    ├── output.tf               -> output of terrafom deployment
+    ├── storage.tf              -> storage deployment file
+    └── terratest               -> automated tests folder
+        └── storage_test.go     -> storage test file
 ```
 ## Architecture
 ![Architecture](doc/architecture.png?raw=true)
