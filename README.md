@@ -1,3 +1,4 @@
+
 # Terraform module to distribute static content.
 This repo contains a terraform module to distribute static content from one bucket for /static/ paths, and as default to serve a simple 'hello-world' javascript SPA application from a different bucket. 
 Some considerations:
@@ -37,6 +38,8 @@ This repository is structured as follows:
 Before you start, you need the following:
 - AWS Command Line Interface installed and configured with the AWS environment you want to deploy to
 - Terraform installed
+- Go is installed
+- Terratest is installed
 - This repository cloned
 ### Configuration
 Edit the *terraform/config.tf* and set you desired configuration for:
@@ -45,22 +48,25 @@ Edit the *terraform/config.tf* and set you desired configuration for:
 - **Resource owner email**: All deployable resources contains a tag *"owner"* for easy finding of the deployed resources in the cloud. 
 
 *Note: These configuration variables could also be set on deployment time by using the --var option in the terraform plan and apply commands. Example:*
-```terraform plan -var="resource_owner_email=aldo.osorio@sarasa.com"```
+```terraform plan -var="resource_owner_email=test@sarasa.com"```
 
 ## Deployment
 Run the following commands in the "terraform" folder to deploy the infrastructure:
 ```terraform init```
 ```terraform plan```
 ```terraform apply``` 
+
 After these steps the infrastructure should be successfully deployed. 
 
 *Note: You can do a quick check by querying all resources that contain the tag "owner" previously defined.  Example:*
-```aws resourcegroupstaggingapi get-resources --tag-filters Key=owner,Values=aldo.osorio@sarasa.com --tags-per-page 100```
+```aws resourcegroupstaggingapi get-resources --tag-filters Key=owner,Values=test@sarasa.com --tags-per-page 100```
 
 ## Cleanup
 Run the following commands to cleanup the infrastructure:
 ```terraform destroy```
 
-  
+## Automated Tests
+Run the following command in the "terraform/terratest" folder to run the infrastructure tests:
+```go test -v```
 
-
+After this step the tests should run. 
