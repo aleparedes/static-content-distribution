@@ -20,7 +20,7 @@ This repository is structured as follows:
 ├── README.md                   -> this readme file
 ├── doc                         -> documentation folder
 │   ├── architecture.png        -> rendered achitecture diagram 
-│   └── architecture.puml       -> plant uml architecture diagram
+│   └── architecture.puml       -> PlantUML architecture diagram
 └── terraform                   -> terraform files
     ├── config.tf               -> terraform configuration variables
     └── storage.tf              -> storage deployment file
