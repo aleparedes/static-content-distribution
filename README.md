@@ -31,6 +31,7 @@ This repository is structured as follows:
 - Private
 - Versioned
 - Encrypted
+- Logging enabled
 
 ## Prerequisites
 Before you start, you need the following:
@@ -47,7 +48,7 @@ Edit the *terraform/config.tf* and set you desired configuration for:
 ```terraform plan -var="resource_owner_email=aldo.osorio@sarasa.com"```
 
 ## Deployment
-Run the following commands to deploy the infrastructure:
+Run the following commands in the "terraform" folder to deploy the infrastructure:
 ```terraform init```
 ```terraform plan```
 ```terraform apply``` 

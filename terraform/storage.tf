@@ -1,3 +1,10 @@
+resource "aws_s3_bucket" "application_log_bucket" {
+  bucket = "${var.application_bucket_name}-logs"
+  acl    = "log-delivery-write"
+  tags = {
+    owner = var.resource_owner_email
+  }
+}
 
 resource "aws_s3_bucket" "application_bucket" {
   bucket        = var.application_bucket_name
@@ -8,6 +15,10 @@ resource "aws_s3_bucket" "application_bucket" {
   }
   tags = {
     owner = var.resource_owner_email
+  }
+  logging {
+    target_bucket = aws_s3_bucket.application_log_bucket.id
+    target_prefix = "log/"
   }
   server_side_encryption_configuration {
     rule {
