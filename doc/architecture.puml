@@ -13,7 +13,7 @@
 
 left to right direction
 S3Bucket(app, "Application", "Serve a SPA")
-S3Bucket(applogs, "Server Access Logs", "Detailed records for the requests that are made to a bucket")
+S3Bucket(applogs, "Static Content Distribution Access Logs", "Detailed records for the requests that are made to buckets /application-log and /static-content-log ")
 S3Bucket(content, "Static Content", "Serve static content")
 Users(users, "Users", "Globally located users")
 Lambda(auth, "Authorization", "Simple authorization")
@@ -27,5 +27,6 @@ cloudfront --> auth: authorization
 auth --> app: request the app
 auth --> content: request the static content
 app -->> applogs: server access logging
+content -->> applogs: server access logging
 
 @enduml
