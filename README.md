@@ -69,7 +69,8 @@ Run the following commands to cleanup the infrastructure:
 ```terraform destroy```
 
 ## Automated Tests
-Run the following command in the "terraform/terratest" folder to run the infrastructure tests:
-```go test -v```
+Run the following commands in the "terraform/terratest" folder to run the infrastructure tests:
+```go mod init "tests"```
+```go test```
 
-After this step the tests should run. 
+After these steps the tests should run and all be passing. 
