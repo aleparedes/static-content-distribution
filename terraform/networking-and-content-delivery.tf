@@ -49,8 +49,8 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
   }
 
   default_cache_behavior {
-    allowed_methods  = ["GET"]
-    cached_methods   = ["GET"]
+    allowed_methods  = ["HEAD", "GET"]
+    cached_methods   = ["HEAD", "GET"]
     target_origin_id = local.application_origin
 
     forwarded_values {
@@ -76,8 +76,8 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
 
   ordered_cache_behavior {
     path_pattern     = "/static/*"
-    allowed_methods  = ["GET"]
-    cached_methods   = ["GET"]
+    allowed_methods  = ["HEAD", "GET"]
+    cached_methods   = ["HEAD", "GET"]
     target_origin_id = local.static_content_origin
 
     forwarded_values {
@@ -95,7 +95,7 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
     viewer_protocol_policy = "allow-all"
   }
 
-  aliases = [var.domain_name]
+  #aliases = [var.domain_name]
   # viewer_certificate {
   #   acm_certificate_arn      = var.certificate_arn
   #   ssl_support_method       = "sni-only"
@@ -123,9 +123,9 @@ data "aws_iam_policy_document" "application_oai_policy" {
     actions = ["s3:GetObject"]
     principals {
       type        = "AWS"
-      identifiers = ["aws_cloudfront_origin_access_identity.application_oai.iam_arn"]
+      identifiers = ["${aws_cloudfront_origin_access_identity.application_oai.iam_arn}"]
     }
-    resources = ["aws_s3_bucket.application_bucket.arn/*"]
+    resources = ["${aws_s3_bucket.application_bucket.arn}/*"]
   }
 }
 
@@ -143,9 +143,9 @@ data "aws_iam_policy_document" "static_content_oai_policy" {
     actions = ["s3:GetObject"]
     principals {
       type        = "AWS"
-      identifiers = ["aws_cloudfront_origin_access_identity.static_content_oai.iam_arn"]
+      identifiers = ["${aws_cloudfront_origin_access_identity.static_content_oai.iam_arn}"]
     }
-    resources = ["aws_s3_bucket.static_content_bucket.arn/*"]
+    resources = ["${aws_s3_bucket.static_content_bucket.arn}/*"]
   }
 }
 

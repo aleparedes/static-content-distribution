@@ -30,6 +30,26 @@ resource "aws_s3_bucket" "application_bucket" {
   }
 }
 
+resource "aws_s3_bucket_object" "main" {
+  bucket       = var.application_bucket_name
+  key          = "index.html"
+  source       = "index.html"
+  content_type = "text/html"
+  depends_on = [
+    aws_s3_bucket.application_bucket,
+  ]
+}
+
+resource "aws_s3_bucket_object" "error" {
+  bucket       = var.application_bucket_name
+  key          = "error.html"
+  source       = "error-page.html"
+  content_type = "text/html"
+  depends_on = [
+    aws_s3_bucket.application_bucket,
+  ]
+}
+
 resource "aws_s3_bucket" "static_content_bucket" {
   bucket        = var.static_content_bucket_name
   acl           = "private"
@@ -52,3 +72,4 @@ resource "aws_s3_bucket" "static_content_bucket" {
     }
   }
 }
+
