@@ -21,3 +21,15 @@ variable "resource_owner_email" {
   description = "Resource owner email"
   default     = "not defined"
 }
+
+variable "domain_name" {
+  type        = string
+  description = "Domain nome"
+  default     = "sarasa.coa"
+}
+
+variable "certificate_arn" {
+  type        = string
+  description = "Certificate ARN"
+  default     = "arn:aws:acm:us-east-1:123123123:certificate/123123123-123-123-123-123123123"
+}

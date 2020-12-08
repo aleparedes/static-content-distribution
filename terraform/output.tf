@@ -25,3 +25,7 @@ output "static_content_distribution_log_bucket_region" {
 output "static_content_distribution_authorizer_arn" {
   value = aws_lambda_function.static_content_distribution_authorizer.arn
 }
+
+output "cloudfront_domain_name" {
+  value = aws_cloudfront_distribution.static_content_distribution.*.domain_name
+}
