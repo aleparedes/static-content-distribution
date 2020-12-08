@@ -25,7 +25,7 @@ variable "resource_owner_email" {
 variable "domain_name" {
   type        = string
   description = "Domain nome"
-  default     = "sarasa.coa"
+  default     = "sarasa.com"
 }
 
 variable "certificate_arn" {

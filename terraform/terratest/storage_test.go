@@ -16,7 +16,7 @@ func TestStorage(t *testing.T) {
     
     expectedApplicationBucketName := fmt.Sprintf("application-bucket-test-%s", strings.ToLower(random.UniqueId()))
     expectedStaticContentBucketName := fmt.Sprintf("static-content-bucket-test-%s", strings.ToLower(random.UniqueId()))
-    expectedOwner := "test@zoi.de"
+    expectedOwner := "test@sarasa.com"
     
     terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
         TerraformDir: "../",
@@ -49,5 +49,5 @@ func TestStorage(t *testing.T) {
     assert.Equal(t, staticContentBucketVersioning, "Enabled")
     assert.Equal(t, staticContwntDistributionLogBucketID, "static-content-distribution-logs")
     assert.Equal(t, staticContwntDistributionLogBucketVersioning, "")
-    assert.Equal(t, expectedOwner, "test@zoi.de")
+    assert.Equal(t, expectedOwner, "test@sarasa.com")
 }
