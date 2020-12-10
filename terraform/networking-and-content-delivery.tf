@@ -67,11 +67,11 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
     min_ttl                = 0
     default_ttl            = 3000
     max_ttl                = 50000
-    # lambda_function_association {
-    #   event_type   = "viewer-request"
-    #   lambda_arn   = aws_lambda_function.edge_headers.qualified_arn
-    #   include_body = false
-    # }
+    lambda_function_association {
+      event_type   = "viewer-request"
+      lambda_arn   = aws_lambda_function.static_content_distribution_authorizer.qualified_arn
+      include_body = false
+    }
   }
 
   ordered_cache_behavior {

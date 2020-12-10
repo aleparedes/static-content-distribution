@@ -46,7 +46,7 @@ resource "aws_lambda_function" "static_content_distribution_authorizer" {
 resource "aws_lambda_permission" "cloudwatch_trigger" {
   provider      = aws.edge_region
   statement_id  = "AllowExecutionFromCloudWatch"
-  principal     = "events.amazonaws.edge_regioncom"
+  principal     = "events.amazonaws.com"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.static_content_distribution_authorizer.function_name
 }
