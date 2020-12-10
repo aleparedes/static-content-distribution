@@ -1,9 +1,11 @@
+# Local variables -------------------------------------------
 locals {
   domain_name           = var.domain_name
   application_origin    = "application_origin"
   static_content_origin = "static_content_origin"
 }
 
+# Route53 -------------------------------------------
 resource "aws_route53_zone" "root" {
   name = local.domain_name
   tags = {
@@ -22,6 +24,7 @@ resource "aws_route53_record" "app" {
   }
 }
 
+# Cloudfront -------------------------------------------
 resource "aws_cloudfront_distribution" "static_content_distribution" {
   default_root_object = "index.html"
   is_ipv6_enabled     = false
@@ -36,7 +39,7 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
     domain_name = aws_s3_bucket.application_bucket.bucket_regional_domain_name
     origin_id   = local.application_origin
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.application_oai.cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.application_bucket_oai.cloudfront_access_identity_path
     }
   }
 
@@ -44,7 +47,7 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
     domain_name = aws_s3_bucket.static_content_bucket.bucket_regional_domain_name
     origin_id   = local.static_content_origin
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.static_content_oai.cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.static_content_bucket_oai.cloudfront_access_identity_path
     }
   }
 
@@ -52,7 +55,6 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
     allowed_methods  = ["HEAD", "GET"]
     cached_methods   = ["HEAD", "GET"]
     target_origin_id = local.application_origin
-
     forwarded_values {
       query_string = true
       cookies {
@@ -60,13 +62,11 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
       }
       headers = ["Origin"]
     }
-
     # viewer_protocol_policy = "redirect-to-https"
     viewer_protocol_policy = "allow-all"
     min_ttl                = 0
     default_ttl            = 3000
     max_ttl                = 50000
-
     # lambda_function_association {
     #   event_type   = "viewer-request"
     #   lambda_arn   = aws_lambda_function.edge_headers.qualified_arn
@@ -79,7 +79,6 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
     allowed_methods  = ["HEAD", "GET"]
     cached_methods   = ["HEAD", "GET"]
     target_origin_id = local.static_content_origin
-
     forwarded_values {
       query_string = false
       headers      = ["Origin"]
@@ -87,69 +86,66 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
         forward = "none"
       }
     }
-
     min_ttl                = 0
     default_ttl            = 3000
     max_ttl                = 50000
     compress               = true
     viewer_protocol_policy = "allow-all"
   }
-
-  #aliases = [var.domain_name]
+  # aliases = [var.domain_name]
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
   # viewer_certificate {
   #   acm_certificate_arn      = var.certificate_arn
   #   ssl_support_method       = "sni-only"
   #   minimum_protocol_version = "TLSv1"
   # }
-  viewer_certificate {
-    cloudfront_default_certificate = true
-  }
-
-  # web_acl_id = aws_waf_web_acl.waf_acl.id
-
   restrictions {
     geo_restriction {
       restriction_type = "none"
     }
   }
+  web_acl_id = aws_waf_web_acl.StaticContentDistributionAccessControlList.id
 }
 
-resource "aws_cloudfront_origin_access_identity" "application_oai" {
+# Origin Access Identity -------------------------------------------
+resource "aws_cloudfront_origin_access_identity" "application_bucket_oai" {
   comment = "aws_cloudfront_origin_access_identity for the application "
 }
 
-data "aws_iam_policy_document" "application_oai_policy" {
+data "aws_iam_policy_document" "application_bucket_oai_policy" {
   statement {
     actions = ["s3:GetObject"]
     principals {
       type        = "AWS"
-      identifiers = ["${aws_cloudfront_origin_access_identity.application_oai.iam_arn}"]
+      identifiers = ["${aws_cloudfront_origin_access_identity.application_bucket_oai.iam_arn}"]
     }
     resources = ["${aws_s3_bucket.application_bucket.arn}/*"]
   }
 }
 
-resource "aws_s3_bucket_policy" "application_oai_policy" {
+resource "aws_s3_bucket_policy" "application_bucket_oai_policy" {
   bucket = aws_s3_bucket.application_bucket.id
-  policy = data.aws_iam_policy_document.application_oai_policy.json
+  policy = data.aws_iam_policy_document.application_bucket_oai_policy.json
 }
 
-resource "aws_cloudfront_origin_access_identity" "static_content_oai" {
+resource "aws_cloudfront_origin_access_identity" "static_content_bucket_oai" {
   comment = "aws_cloudfront_origin_access_identity for the static content "
 }
 
-data "aws_iam_policy_document" "static_content_oai_policy" {
+data "aws_iam_policy_document" "static_content_bucket_oai_policy" {
   statement {
     actions = ["s3:GetObject"]
     principals {
       type        = "AWS"
-      identifiers = ["${aws_cloudfront_origin_access_identity.static_content_oai.iam_arn}"]
+      identifiers = ["${aws_cloudfront_origin_access_identity.static_content_bucket_oai.iam_arn}"]
     }
     resources = ["${aws_s3_bucket.static_content_bucket.arn}/*"]
   }
 }
 
-resource "aws_s3_bucket_policy" "static_content_oai_policy" {
+resource "aws_s3_bucket_policy" "static_content_bucket_oai_policy" {
   bucket = aws_s3_bucket.static_content_bucket.id
-  policy = data.aws_iam_policy_document.static_content_oai_policy.json
+  policy = data.aws_iam_policy_document.static_content_bucket_oai_policy.json
 }

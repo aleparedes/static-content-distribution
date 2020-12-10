@@ -30,7 +30,7 @@ resource "aws_s3_bucket" "application_bucket" {
   }
 }
 
-resource "aws_s3_bucket_object" "main" {
+resource "aws_s3_bucket_object" "entry_point" {
   bucket       = var.application_bucket_name
   key          = "index.html"
   source       = "index.html"
@@ -38,16 +38,22 @@ resource "aws_s3_bucket_object" "main" {
   depends_on = [
     aws_s3_bucket.application_bucket,
   ]
+  tags = {
+    owner = var.resource_owner_email
+  }
 }
 
-resource "aws_s3_bucket_object" "error" {
+resource "aws_s3_bucket_object" "authentication_error" {
   bucket       = var.application_bucket_name
-  key          = "error.html"
-  source       = "error-page.html"
+  key          = "authentication_error.html"
+  source       = "authentication-error.html"
   content_type = "text/html"
   depends_on = [
     aws_s3_bucket.application_bucket,
   ]
+  tags = {
+    owner = var.resource_owner_email
+  }
 }
 
 resource "aws_s3_bucket" "static_content_bucket" {
