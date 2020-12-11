@@ -10,7 +10,13 @@ exports.handler = (event, context, callback) => {
   const validator = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`;
   const unauthorizedResponse = {
     status: '401',
-    body: 'Unauthorized',
+    statusDescription: 'Unauthorized',
+    headers: {
+      'www-authenticate': [{
+        key: 'WWW-Authenticate',
+        value: 'Basic'
+      }]
+    },
   };
 
   console.log('headers: ', headers);

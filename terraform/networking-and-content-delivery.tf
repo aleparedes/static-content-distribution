@@ -13,9 +13,31 @@ resource "aws_route53_zone" "root" {
   }
 }
 
-resource "aws_route53_record" "app" {
+resource "aws_route53_record" "www_app" {
   zone_id = aws_route53_zone.root.zone_id
   name    = "www"
+  type    = "A"
+  alias {
+    name                   = aws_cloudfront_distribution.static_content_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.static_content_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "example_app" {
+  zone_id = aws_route53_zone.root.zone_id
+  name    = "example"
+  type    = "A"
+  alias {
+    name                   = aws_cloudfront_distribution.static_content_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.static_content_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "root_app" {
+  zone_id = aws_route53_zone.root.zone_id
+  name    = var.domain_name
   type    = "A"
   alias {
     name                   = aws_cloudfront_distribution.static_content_distribution.domain_name
@@ -62,11 +84,11 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
       }
       headers = ["Origin"]
     }
-    # viewer_protocol_policy = "redirect-to-https"
-    viewer_protocol_policy = "allow-all"
-    min_ttl                = 0
-    default_ttl            = 3000
-    max_ttl                = 50000
+    viewer_protocol_policy = "redirect-to-https"
+    # viewer_protocol_policy = "allow-all"
+    min_ttl     = 0
+    default_ttl = 3000
+    max_ttl     = 50000
     lambda_function_association {
       event_type   = "viewer-request"
       lambda_arn   = aws_lambda_function.static_content_distribution_authorizer.qualified_arn
@@ -92,15 +114,15 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
     compress               = true
     viewer_protocol_policy = "allow-all"
   }
-  # aliases = [var.domain_name]
-  viewer_certificate {
-    cloudfront_default_certificate = true
-  }
+  aliases = [var.domain_name]
   # viewer_certificate {
-  #   acm_certificate_arn      = var.certificate_arn
-  #   ssl_support_method       = "sni-only"
-  #   minimum_protocol_version = "TLSv1"
+  #   cloudfront_default_certificate = true
   # }
+  viewer_certificate {
+    acm_certificate_arn      = var.certificate_arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1"
+  }
   restrictions {
     geo_restriction {
       restriction_type = "none"
