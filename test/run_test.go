@@ -13,6 +13,7 @@ import (
 var expectedApplicationBucketName = fmt.Sprintf("application-bucket-test-%s", strings.ToLower(random.UniqueId()))
 var expectedStaticContentBucketName = fmt.Sprintf("static-content-bucket-test-%s", strings.ToLower(random.UniqueId()))
 var expectedOwner = "test@sarasa.com"
+// change the following with the desired certificate ARN to use:
 var expectedCertificateArn = "arn:aws:acm:us-east-1:123123123:certificate/123123123-123-123-123-123123123"
 
 func TestDistribution(t *testing.T) {
