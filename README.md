@@ -28,7 +28,7 @@ Edit the *terraform/config.tf* and set you desired configuration for:
 - **Force destroy bucket**: A boolean that indicates if all objects should be deleted from the bucket, so that the bucket can be destroyed without error. These objects are _not_ recoverable
 - **Resource owner email**: All deployable resources contains a tag *"owner"* for easy finding of the deployed resources in the cloud
 - **Domain name**: External DNS domain you want to use 
-- **Certificate ARN**: The ARN of the ACM certificate is taken as a parameter
+- **Certificate ARN**: The ARN of the ACM certificate you want to use
 - **Ip whitelist range**: The range of the allowed ips for this app
 
 *Note: These configuration variables could also be set on deployment time by using the --var option in the terraform plan and apply commands. Example:*
@@ -38,14 +38,14 @@ Edit the *terraform/config.tf* and set you desired configuration for:
 This repository is structured as follows:
 ```
 .
-├── .gitignore                                  -> git ignored files
-├── README.md                                   -> this readme file
-├── authorizer                                  -> authorizer lambda function code
+├── .gitignore                                          -> git ignored files
+├── README.md                                           -> this readme file
+├── authorizer                                          -> authorizer lambda function code
 │   └── authorizer.js
-├── doc                                         -> documentation and diagrams folder
+├── doc                                                 -> documentation and diagrams folder
 │   ├── architecture.png
 │   └── architecture.puml
-├── html                                        -> html and static content 
+├── html                                                -> html and static content 
 │   ├── index.html
 │   └── static
 │       ├── assets
@@ -67,15 +67,15 @@ This repository is structured as follows:
 │       │   └── styles.css
 │       └── js
 │           └── scripts.js
-├── terraform                                   -> terraform files    
+├── terraform                                           -> terraform files  
 │   ├── compute.tf
-│   ├── config.tf                               -> configuration file
+│   ├── config.tf                                       -> configuration file
 │   ├── identity-and-access-management.tf
 │   ├── networking-and-content-delivery.tf
 │   ├── output.tf
 │   └── storage.tf
-└── test                                        -> automated tests folder
-    └── storage_test.go
+└── test                                                -> automated tests folder
+    └── run_test.go
 ```
 
 ## Architecture
