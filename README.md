@@ -100,6 +100,7 @@ This repository is structured as follows:
 
 ## Deployment
 Run the following commands in the "terraform" folder to deploy the infrastructure:
+
 ```terraform init```
 
 ```terraform plan```
