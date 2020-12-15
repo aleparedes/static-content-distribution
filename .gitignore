@@ -3,6 +3,9 @@
 
 # Terraform lock files
 *.hcl
+
+# Deploy packages
+*.zip
  
 # Terraform state files
 *.tfstate

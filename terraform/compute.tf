@@ -1,10 +1,10 @@
-data "archive_file" "static_content_distribution_authorizer_code" {
+data "archive_file" "authorizer_code" {
   type        = "zip"
-  source_file = "authorizer.js"
+  source_file = "../authorizer/authorizer.js"
   output_path = "lambda_deploy_package.zip"
 }
 
-data "aws_iam_policy_document" "assume_role_policy_lambda" {
+data "aws_iam_policy_document" "assume_role_policy" {
   statement {
     principals {
       type        = "Service"
@@ -14,32 +14,32 @@ data "aws_iam_policy_document" "assume_role_policy_lambda" {
   }
 }
 
-resource "aws_iam_role" "service_role_lambda" {
+resource "aws_iam_role" "service_role" {
   provider = aws.edge_region
-  name     = "service_role_lambda"
+  name     = "service_role"
   tags = {
     owner = var.resource_owner_email
   }
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_lambda.json
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
-resource "aws_iam_role_policy_attachment" "sto-readonly-role-policy-attach" {
+resource "aws_iam_role_policy_attachment" "role_policy_attachment" {
   provider   = aws.edge_region
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.service_role_lambda.name
+  role       = aws_iam_role.service_role.name
 }
 
 resource "aws_lambda_function" "static_content_distribution_authorizer" {
   provider         = aws.edge_region
   runtime          = "nodejs12.x"
   filename         = "lambda_deploy_package.zip"
-  source_code_hash = data.archive_file.static_content_distribution_authorizer_code.output_base64sha256
+  source_code_hash = data.archive_file.authorizer_code.output_base64sha256
   function_name    = "static_content_distribution_authorizer"
   handler          = "authorizer.handler"
   tags = {
     owner = var.resource_owner_email
   }
-  role    = aws_iam_role.service_role_lambda.arn
+  role    = aws_iam_role.service_role.arn
   publish = true
 }
 

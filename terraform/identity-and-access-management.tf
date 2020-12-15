@@ -1,18 +1,18 @@
 # WAF -------------------------------------------
-resource "aws_waf_ipset" "static_content_distribution_firewall_ips" {
-  name = "static_content_distribution_firewall_ips"
+resource "aws_waf_ipset" "firewall_ips" {
+  name = "firewall_ips"
   ip_set_descriptors {
     type  = "IPV4"
     value = var.alllowed_ip_range
   }
 }
 
-resource "aws_waf_rule" "StaticContentDistributionFirewallIpsRule" {
-  depends_on  = [aws_waf_ipset.static_content_distribution_firewall_ips]
-  name        = "StaticContentDistributionFirewallIpsRule"
-  metric_name = "StaticContentDistributionFirewallIpsRule"
+resource "aws_waf_rule" "FirewallIpsRule" {
+  depends_on  = [aws_waf_ipset.firewall_ips]
+  name        = "FirewallIpsRule"
+  metric_name = "FirewallIpsRule"
   predicates {
-    data_id = aws_waf_ipset.static_content_distribution_firewall_ips.id
+    data_id = aws_waf_ipset.firewall_ips.id
     negated = false
     type    = "IPMatch"
   }
@@ -21,13 +21,13 @@ resource "aws_waf_rule" "StaticContentDistributionFirewallIpsRule" {
   }
 }
 
-resource "aws_waf_web_acl" "StaticContentDistributionAccessControlList" {
+resource "aws_waf_web_acl" "AccessControlList" {
   depends_on = [
-    aws_waf_ipset.static_content_distribution_firewall_ips,
-    aws_waf_rule.StaticContentDistributionFirewallIpsRule,
+    aws_waf_ipset.firewall_ips,
+    aws_waf_rule.FirewallIpsRule,
   ]
-  name        = "StaticContentDistributionAccessControlList"
-  metric_name = "StaticContentDistributionAccessControlList"
+  name        = "AccessControlList"
+  metric_name = "AccessControlList"
   default_action {
     type = "BLOCK"
   }
@@ -36,7 +36,7 @@ resource "aws_waf_web_acl" "StaticContentDistributionAccessControlList" {
       type = "ALLOW"
     }
     priority = 1
-    rule_id  = aws_waf_rule.StaticContentDistributionFirewallIpsRule.id
+    rule_id  = aws_waf_rule.FirewallIpsRule.id
     type     = "REGULAR"
   }
   tags = {

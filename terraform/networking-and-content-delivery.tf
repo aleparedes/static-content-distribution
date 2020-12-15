@@ -128,7 +128,7 @@ resource "aws_cloudfront_distribution" "static_content_distribution" {
       restriction_type = "none"
     }
   }
-  web_acl_id = aws_waf_web_acl.StaticContentDistributionAccessControlList.id
+  web_acl_id = aws_waf_web_acl.AccessControlList.id
 }
 
 # Origin Access Identity -------------------------------------------
