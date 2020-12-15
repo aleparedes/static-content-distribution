@@ -29,3 +29,15 @@ output "static_content_distribution_authorizer_arn" {
 output "cloudfront_domain_name" {
   value = aws_cloudfront_distribution.static_content_distribution.*.domain_name
 }
+
+output "hostnames" {
+  value = aws_route53_record.root_app.*.fqdn
+}
+
+output "function_name" {
+  value = aws_lambda_function.static_content_distribution_authorizer.function_name
+}
+
+output "function_role_name" {
+  value = aws_iam_role.service_role.name
+}
