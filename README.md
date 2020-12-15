@@ -97,7 +97,7 @@ This repository is structured as follows:
 - Some records created with a custom domain
 
 ## Deployment
-Run the following commands in the "terraform" folder to deploy the infrastructure:
+After setting the configuration variables in the config.tf file, run the following commands in the "terraform" folder to deploy the infrastructure:
 
 ```terraform init```
 
@@ -116,10 +116,8 @@ Run the following commands to cleanup the infrastructure:
 
 ```terraform destroy```
 
-As the cloudfront and the lambda (@edge) are replicated resources, the destroy of them may take some time. Retry the destoy after a while...
-
-## Manual Tests
-Manual tests of the deplpyment were executed
+As the cloudfront and the lambda (@edge) are replicated resources, the destroy of them may take some time and may fail. Retry the destoy after a while...
+If the error persist, execute a ```terraform apply``` command and then ```terraform destroy```. The removal of replicated resources sometimes requieres this due to timing and dependencies.
 
 ## Automated Tests
 Run the following commands in the "test" folder to run the infrastructure tests:
@@ -136,5 +134,6 @@ Run the following commands in the "terraform" folder to cleanup the infrastructu
 
 ```terraform destroy```
 
-and retry the destoy after a while for the replicated resources...
+and retry the destoy after a while for the replicated resources... 
+If it fails, execute a ```terraform apply``` command and then ```terraform destroy```. The removal of replicated resources sometimes requieres this due to timing and dependencies.
 
