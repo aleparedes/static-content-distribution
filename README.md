@@ -70,9 +70,7 @@ This repository is structured as follows:
 ├── terraform                                   -> terraform files    
 │   ├── compute.tf
 │   ├── config.tf                               -> configuration file
-│   ├── crash.log
 │   ├── identity-and-access-management.tf
-│   ├── lambda_deploy_package.zip
 │   ├── networking-and-content-delivery.tf
 │   ├── output.tf
 │   └── storage.tf
