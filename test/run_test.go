@@ -12,8 +12,8 @@ import (
 
 var expectedApplicationBucketName = fmt.Sprintf("application-bucket-test-%s", strings.ToLower(random.UniqueId()))
 var expectedStaticContentBucketName = fmt.Sprintf("static-content-bucket-test-%s", strings.ToLower(random.UniqueId()))
-var expectedOwner = "alejandro.paredes@zoi.de"
-var expectedCertificateArn = "arn:aws:acm:us-east-1:733412096037:certificate/918276dc-e1d8-46df-a8f7-e8065efc9c83"
+var expectedOwner = "test@sarasa.com"
+var expectedCertificateArn = "arn:aws:acm:us-east-1:123123123:certificate/123123123-123-123-123-123123123"
 
 func TestDistribution(t *testing.T) {
     // Arrange ------------------------------------------------
