@@ -23,13 +23,13 @@ Before you start, you need the following:
 
 ## Configuration Variables
 Edit the *terraform/config.tf* and set you desired configuration for:
-- **Application bucket name**: The name of the bucket that stores the application.
-- **Static content bucket name**: The name of the bucket that stores the static content.
-- **Force destroy bucket**: A boolean that indicates if all objects should be deleted from the bucket, so that the bucket can be destroyed without error. These objects are _not_ recoverable.
-- **Resource owner email**: All deployable resources contains a tag *"owner"* for easy finding of the deployed resources in the cloud.
+- **Application bucket name**: The name of the bucket that stores the application
+- **Static content bucket name**: The name of the bucket that stores the static content
+- **Force destroy bucket**: A boolean that indicates if all objects should be deleted from the bucket, so that the bucket can be destroyed without error. These objects are _not_ recoverable
+- **Resource owner email**: All deployable resources contains a tag *"owner"* for easy finding of the deployed resources in the cloud
 - **Domain name**: External DNS domain you want to use 
-- **Certificate ARN**: The ARN of the ACM certificate is taken as a parameter.
-- **Ip whitelist range**: The range of the allowed ips for this app.
+- **Certificate ARN**: The ARN of the ACM certificate is taken as a parameter
+- **Ip whitelist range**: The range of the allowed ips for this app
 
 *Note: These configuration variables could also be set on deployment time by using the --var option in the terraform plan and apply commands. Example:*
 ```terraform plan -var="resource_owner_email=test@sarasa.com"```
@@ -101,21 +101,27 @@ This repository is structured as follows:
 ## Deployment
 Run the following commands in the "terraform" folder to deploy the infrastructure:
 ```terraform init```
+
 ```terraform plan```
+
 ```terraform apply``` 
 
 After these steps the infrastructure should be successfully deployed and the static content distribution should be accessible with username: test and password: test.
 
 *Note: You can also do a quick check by querying all resources that contain the tag "owner" previously defined.  Example:*
+
 ```aws resourcegroupstaggingapi get-resources --tag-filters Key=owner,Values=test@sarasa.com --tags-per-page 100```
 
 ### Cleanup
 Run the following commands to cleanup the infrastructure:
+
 ```terraform destroy```
 
 ## Automated Tests
 Run the following commands in the "terraform/terratest" folder to run the infrastructure tests:
+
 ```go mod init "tests"```
+
 ```go test```
 
 After these steps the tests should run and all be passing. 

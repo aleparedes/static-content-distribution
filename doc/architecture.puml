@@ -10,6 +10,7 @@
 !include <awslib/Storage/S3Bucket>
 !include <awslib/NetworkingAndContentDelivery/CloudFront>
 !include <awslib/NetworkingAndContentDelivery/Route53>
+!include <awslib/SecurityIdentityAndCompliance/WAF>
 
 left to right direction
 S3Bucket(app, "Application", "Serve a SPA")
@@ -19,6 +20,7 @@ Users(users, "Users", "Globally located users")
 Lambda(auth, "Authorization", "Simple authorization")
 CloudFront(cloudfront, "Distribution", "Content delivery network")
 Route53(route53, "DNS", "Domain Name System")
+WAF(waf, "Ip Range Whitelist", "Web Application Firewall")
 
 users --> cloudfront: content requests
 users --> route53: DNS queries
@@ -26,7 +28,8 @@ cloudfront <--> route53: handling the DNS
 cloudfront --> auth: authorization
 auth --> app: request the app
 auth --> content: request the static content
-app -->> applogs: server access logging
-content -->> applogs: server access logging
+app --> applogs: server access logging
+content --> applogs: server access logging
+waf <--> cloudfront: distribution is only accessible for certain IP ranges
 
 @enduml
