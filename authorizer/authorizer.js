@@ -5,8 +5,8 @@ exports.handler = (event, context, callback) => {
   const {
     headers
   } = event.Records[0].cf.request;
-  const username = 'sarasa';
-  const password = 'sarasa';
+  const username = 'test';
+  const password = 'test';
   const validator = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`;
   const unauthorizedResponse = {
     status: '401',

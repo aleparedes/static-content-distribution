@@ -1,19 +1,17 @@
 
 # Terraform module to distribute static content.
-This repo contains a terraform module to distribute static content from one bucket for /static/ paths, and as default to serve a simple 'hello-world' javascript SPA application from a different bucket. 
+This repo contains a terraform module to distribute static content from one bucket for /static/ paths, and as default to serve a dummy 'hello-world' javascript SPA application from a different bucket. 
 Some considerations:
-- The distribution is only accessible for certain IP ranges.
-- The ARN of the ACM certificate is taken as a parameter.
-- S3 bucket are created with best practices configuration.
+- The distribution is only accessible for certain IP ranges
+- The ARN of the ACM certificate is taken as a parameter
+- S3 bucket are created with best practices configuration
 - A Route53 HostedZone is created
-- A CloudFront web distribution is created.
-- Relevant DNS entries pointing to the distribution are created.
-- An IP protection is implemented.
-- A basic authentication protection for the distribution is implemented (static username + password).
-- Documentation of how to deploy and run is provided.
-- Testing is included.
-
-
+- A CloudFront web distribution is created
+- Relevant DNS entries pointing to the distribution are created
+- An IP protection is implemented
+- A basic authentication protection for the distribution is implemented (static username + password)
+- Documentation of how to deploy and run is provided
+- Testing is included
 
 ## Prerequisites
 Before you start, you need the following:
@@ -28,28 +26,58 @@ Edit the *terraform/config.tf* and set you desired configuration for:
 - **Application bucket name**: The name of the bucket that stores the application.
 - **Static content bucket name**: The name of the bucket that stores the static content.
 - **Force destroy bucket**: A boolean that indicates if all objects should be deleted from the bucket, so that the bucket can be destroyed without error. These objects are _not_ recoverable.
-- **Domain name**: External DNS domain you want to use 
 - **Resource owner email**: All deployable resources contains a tag *"owner"* for easy finding of the deployed resources in the cloud.
+- **Domain name**: External DNS domain you want to use 
 - **Certificate ARN**: The ARN of the ACM certificate is taken as a parameter.
+- **Ip whitelist range**: The range of the allowed ips for this app.
 
 *Note: These configuration variables could also be set on deployment time by using the --var option in the terraform plan and apply commands. Example:*
 ```terraform plan -var="resource_owner_email=test@sarasa.com"```
 
 ## Repository Structure
 This repository is structured as follows:
-```shell
+```
 .
-├── .gitignore                  -> ignored files
-├── README.md                   -> this readme file
-├── doc                         -> documentation and diagrams folder
-│   ├── architecture.png        -> rendered achitecture diagram 
-│   └── architecture.puml       -> PlantUML architecture diagram
-└── terraform                   -> terraform files
-    ├── config.tf               -> terraform configuration variables          
-    ├── output.tf               -> output of terrafom deployment
-    ├── storage.tf              -> storage deployment file
-    └── terratest               -> automated tests folder
-        └── storage_test.go     -> storage test file
+├── .gitignore                                  -> git ignored files
+├── README.md                                   -> this readme file
+├── authorizer                                  -> authorizer lambda function code
+│   └── authorizer.js
+├── doc                                         -> documentation and diagrams folder
+│   ├── architecture.png
+│   └── architecture.puml
+├── html                                        -> html and static content 
+│   ├── index.html
+│   └── static
+│       ├── assets
+│       │   ├── img
+│       │   │   ├── avataaars.svg
+│       │   │   ├── favicon.ico
+│       │   │   └── portfolio
+│       │   │       ├── cabin.png
+│       │   │       ├── cake.png
+│       │   │       ├── circus.png
+│       │   │       ├── game.png
+│       │   │       ├── safe.png
+│       │   │       └── submarine.png
+│       │   └── mail
+│       │       ├── contact_me.js
+│       │       ├── contact_me.php
+│       │       └── jqBootstrapValidation.js
+│       ├── css
+│       │   └── styles.css
+│       └── js
+│           └── scripts.js
+├── terraform                                   -> terraform files    
+│   ├── compute.tf
+│   ├── config.tf                               -> configuration file
+│   ├── crash.log
+│   ├── identity-and-access-management.tf
+│   ├── lambda_deploy_package.zip
+│   ├── networking-and-content-delivery.tf
+│   ├── output.tf
+│   └── storage.tf
+└── test                                        -> automated tests folder
+    └── storage_test.go
 ```
 
 ## Architecture
@@ -67,15 +95,18 @@ This repository is structured as follows:
 - Default root object : "index.html"
 - Cache enabled 
 
+### Rout353
+- Some records created with a custom domain
+
 ## Deployment
 Run the following commands in the "terraform" folder to deploy the infrastructure:
 ```terraform init```
 ```terraform plan```
 ```terraform apply``` 
 
-After these steps the infrastructure should be successfully deployed. 
+After these steps the infrastructure should be successfully deployed and the static content distribution should be accessible with username: test and password: test.
 
-*Note: You can do a quick check by querying all resources that contain the tag "owner" previously defined.  Example:*
+*Note: You can also do a quick check by querying all resources that contain the tag "owner" previously defined.  Example:*
 ```aws resourcegroupstaggingapi get-resources --tag-filters Key=owner,Values=test@sarasa.com --tags-per-page 100```
 
 ### Cleanup
