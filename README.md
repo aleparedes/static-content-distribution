@@ -131,7 +131,7 @@ Run the following commands in the "test" folder to run the infrastructure tests:
 After these steps the tests should run and pass.
 Consider the update of the expected tests varirables, such as the certificate ARN that you are using...
 
-The destroy of the infrastructure should be done manyally after the test run as the cloudfront and the lambda (@edge) are replicated resources.
+The destroy of the infrastructure should be done manually after the test run as the cloudfront and the lambda (@edge) are replicated resources.
 Run the following commands in the "terraform" folder to cleanup the infrastructure after the test run:
 
 ```terraform destroy```

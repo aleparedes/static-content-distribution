@@ -29,7 +29,7 @@ func TestDistribution(t *testing.T) {
             "certificate_arn": expectedCertificateArn,
         },
     })
-    // The destroy is done manyally as the cloudfront and the lambda (@edge) 
+    // The destroy is done manually as the cloudfront and the lambda (@edge) 
     // are replicated resources, the destroy of them may take some time. 
     // Retry the destoy after a while...
     // defer terraform.Destroy(t, terraformOptions)
