@@ -1,6 +1,6 @@
 
 # Terraform module to distribute static content.
-This repo contains a terraform module to distribute static content from one bucket for /static/ paths, and as default to serve a dummy javascript SPA application (https://startbootstrap.com/theme/freelancer) from a different bucket. 
+This repo contains a terraform module to distribute static content from one bucket for /static/ paths, and as default to serve a dummy javascript SPA application from a different bucket. 
 Some considerations:
 - The distribution is only accessible for certain IP ranges
 - The ARN of the ACM certificate is taken as a parameter
@@ -38,35 +38,16 @@ Edit the *terraform/config.tf* and set you desired configuration for:
 This repository is structured as follows:
 ```
 .
-├── .gitignore                                          -> git ignored files
+├── .gitignore                                          
 ├── README.md                                           -> this readme file
 ├── authorizer                                          -> authorizer lambda function code
-│   └── authorizer.js
-├── doc                                                 -> documentation and diagrams folder
+│   └── authorizer.js                                   
+├── doc                                                 -> diagrams folder
 │   ├── architecture.png
 │   └── architecture.puml
-├── html                                                -> html and static content 
-│   ├── index.html
-│   └── static
-│       ├── assets
-│       │   ├── img
-│       │   │   ├── avataaars.svg
-│       │   │   ├── favicon.ico
-│       │   │   └── portfolio
-│       │   │       ├── cabin.png
-│       │   │       ├── cake.png
-│       │   │       ├── circus.png
-│       │   │       ├── game.png
-│       │   │       ├── safe.png
-│       │   │       └── submarine.png
-│       │   └── mail
-│       │       ├── contact_me.js
-│       │       ├── contact_me.php
-│       │       └── jqBootstrapValidation.js
-│       ├── css
-│       │   └── styles.css
-│       └── js
-│           └── scripts.js
+├── html                                                
+│   ├── index.html                                      -> distribution default root object
+│   └── static                                          -> static content folder
 ├── terraform                                           -> terraform files  
 │   ├── compute.tf
 │   ├── config.tf                                       -> configuration file
